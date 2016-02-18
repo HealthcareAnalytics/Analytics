@@ -65,6 +65,9 @@ namespace HealthcareAnalytics.Models
         [Required]
         public Guid ID { get; private set; }
 
+        [Required]
+        public string Position { get; set; }
+
         public Guid? BranchId { get; set; }
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
@@ -76,6 +79,7 @@ namespace HealthcareAnalytics.Models
         [Key]
         [Required]
         public Guid ID { get; private set; }
+        public string BranchName { get; set; }
 
         public ICollection<Employee> Employees { get; set; }
         public ICollection<Patient> Patients { get; set; }
