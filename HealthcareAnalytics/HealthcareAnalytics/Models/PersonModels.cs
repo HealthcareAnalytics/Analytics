@@ -25,29 +25,32 @@ namespace HealthcareAnalytics.Models
         }
     }
 
-    public class NameInformation
+    public class GenderValidation : ValidationAttribute
     {
-        public NameInformation()
+        public static ValidationResult IsValidGender(string gender)
         {
-            ID = Guid.NewGuid();
+            if (gender.Equals("M") || gender.Equals("F"))
+            {
+                return ValidationResult.Success;
+            }
+            else
+            {
+                return new ValidationResult("Valid gender values are M or F");
+            }
         }
+    }
 
-        public NameInformation(string title, string firstName, string lastName, string middleName, string nickName,
-            string maidenName)
+    public class NameDetails
+    {
+        public NameDetails()
         {
             ID = Guid.NewGuid();
-            Title = title;
-            FirstName = firstName;
-            LastName = lastName;
-            MiddleName = middleName;
-            NickName = nickName;
-            MaidenName = maidenName;
         }
 
         [Key]
         [Required]
         [ScaffoldColumn(false)]
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         [CustomValidation(typeof(TitleValidationAttribute), "IsValidTitle")]
         [Required(ErrorMessage = "A title is required")]
@@ -79,26 +82,10 @@ namespace HealthcareAnalytics.Models
             ID = Guid.NewGuid();
         }
 
-        public ContactInformation(string street, string city, string provinceState, string country, string postalZip,
-            string phone, string cell, string fax, string email)
-        {
-            ID = Guid.NewGuid();
-            Street = street;
-            City = city;
-            ProvinceState = provinceState;
-            Country = country;
-            ZipPostalCode = postalZip;
-            PhoneNumber = phone;
-            CellPhoneNumber = cell;
-            FaxNumber = fax;
-            Email = email;
-        }
-
-
         [Key]
         [Required]
         [ScaffoldColumn(false)]
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         [Required(ErrorMessage = "A street is required")]
         public string Street { get; set; }
@@ -135,35 +122,29 @@ namespace HealthcareAnalytics.Models
         public string Email { get; set; }
     }
 
-    public class Person
+    public abstract class Person
     {
         public Person()
         {
             ID = Guid.NewGuid();
         }
 
-        public Person(NameInformation nameInfo, DateTime dob, ContactInformation homeContact, ContactInformation workContact)
-        {
-            ID = Guid.NewGuid();
-            Name = nameInfo;
-            DateOfBirth = dob;
-            HomeContactInfo = homeContact;
-            WorkContactInfo = workContact;
-            HomeContactInfoId = homeContact.ID;
-            WorkContactInfoId = workContact.ID;
-        }
-
         [Key]
         [Required]
-        public Guid ID { get; private set; }
+        public Guid ID { get; set; }
 
         [Required]
         public  DateTime DateOfBirth { get; set; }
 
         [Required]
-        [ForeignKey("NameId")]
-        public NameInformation Name { get; set; }
-        public Guid NameId { get; set; }
+        [CustomValidation(typeof(TitleValidationAttribute), "IsValidTitle")]
+        [StringLength(1)]
+        public string Gender { get; set; }
+
+        [Required]
+        [ForeignKey("NameDetailsId")]
+        public NameDetails NameDetails { get; set; }
+        public Guid NameDetailsId { get; set; }
 
         [Required]
         [ForeignKey("HomeContactInfoId")]

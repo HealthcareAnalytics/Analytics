@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -9,76 +10,58 @@ using HealthcareAnalytics.Models;
 
 namespace HealthcareAnalytics.Models
 {
-    public class EmploymentDateSet
+    public class EmploymentDetails
     {
-        public EmploymentDateSet()
-        {
-        }
-
-        public EmploymentDateSet(Employee emp, DateTime start, DateTime termination)
-        {
-            Employee = emp;
-            EmployeeId = emp.ID;
-            StartDate = start;
-            TerminationDate = termination;
-        }
-
+        
         [Key]
-        public Guid EmployeeId { get; private set; }
+        [ScaffoldColumn(false)]
+        public Guid ID { get; set; }
+
+        [ScaffoldColumn(false)]
+        public Guid EmployeeId { get; set; }
         [ForeignKey("EmployeeId")]
-        public Employee Employee { get; private set; }
+        public Employee Employee { get; set; }
+
         [Required]
         public DateTime StartDate { get; set; }
         public DateTime TerminationDate { get; set; }
+
+        [Required]
+        public string Position { get; set; }
+
+        [Required]
+        public string Department { get; set; }
     }
 
-    public class PatientCheckinDischargeDateSet
+    public class CheckinDetails
     {
-        public PatientCheckinDischargeDateSet()
-        {
-        }
-
-        public PatientCheckinDischargeDateSet(Patient patient, DateTime checkin, DateTime discharge)
-        {
-            Patient = patient;
-            PatientId = patient.ID;
-            CheckinDate = checkin;
-            DischargeDate = discharge;
-        }
-
         [Key]
-        [Required]
-        public Guid PatientId { get; private set; }
+        [ScaffoldColumn(false)]
+        public Guid ID { get; set; }
 
+        [Required]
+        [ScaffoldColumn(false)]
+        public Guid PatientId { get; set; }
         [ForeignKey("PatientId")]
-        public Patient Patient { get; private set; }
+        public Patient Patient { get; set; }
 
         [Required]
         public DateTime CheckinDate { get; set; }
+
         public DateTime DischargeDate { get; set; }
+
+        public string IllnessDetails { get; set; }
+
+        public string Diagnosis { get; set; }
+
     }
 
 
     public class Patient : Person
     {
-        public Patient() : base()
-        {
-        }
-
-        public Patient(int medicareCardNumber, PatientCheckinDischargeDateSet dateSet, NameInformation nameInfo, DateTime dob, 
-            ContactInformation homeContact, ContactInformation workContact, Branch branch) 
-            : base(nameInfo, dob, homeContact, workContact)
-        {
-            Branch = branch;
-            BranchId = branch.ID;
-            MedicareCardNumber = medicareCardNumber;
-            CheckinDischargeDates = new PatientCheckinDischargeDateSet[1];
-            CheckinDischargeDates.Add(dateSet);
-        }
-
         public int MedicareCardNumber { get; set; }
 
-        public ICollection<PatientCheckinDischargeDateSet> CheckinDischargeDates { get; set; }
+        public ICollection<CheckinDetails> ChecckinDetails { get; set; }
 
         public Guid BranchId { get; set; }
         [ForeignKey("BranchId")]
@@ -87,29 +70,7 @@ namespace HealthcareAnalytics.Models
 
     public class Employee : Person
     {
-        public Employee() : base()
-        {
-        }
-
-        public Employee(string department, string position, EmploymentDateSet dateSet, 
-            NameInformation nameInfo, DateTime dob, ContactInformation homeContact, ContactInformation workContact,
-            Branch branch) : base(nameInfo, dob, homeContact, workContact)
-        {
-            Position = position;
-            Department = department;
-            Branch = branch;
-            BranchId = branch.ID;
-            EmploymentDates = new EmploymentDateSet[1];
-            EmploymentDates.Add(dateSet);
-        }
-
-        [Required]
-        public string Position { get; set; }
-
-        [Required]
-        public string Department { get; set; }
-
-        public ICollection<EmploymentDateSet> EmploymentDates { get; set; } 
+        public ICollection<EmploymentDetails> EmploymentDetails { get; set; } 
 
         public Guid BranchId { get; set; }
         [ForeignKey("BranchId")]
@@ -119,16 +80,15 @@ namespace HealthcareAnalytics.Models
     // TODO: Incident model is incomplete
     public class Incident
     {
-        public Incident(Branch branch)
+        public Incident()
         {
             ID = Guid.NewGuid();
-            Branch = branch;
-            BranchId = branch.ID;
         }
 
         [Key]
         [Required]
-        public Guid ID { get; private set; }
+        [ScaffoldColumn(false)]
+        public Guid ID { get; set; }
 
         [Required]
         public Guid BranchId { get; set; }
@@ -139,10 +99,24 @@ namespace HealthcareAnalytics.Models
 
     public class Branch
     {
+        public Branch()
+        {
+            ID = Guid.NewGuid();
+        }
+
         [Key]
         [Required]
-        public Guid ID { get; private set; }
+        [ScaffoldColumn(false)]
+        public Guid ID { get; set; }
+
+        [Required]
+        [DisplayName("Branch Name")]
         public string BranchName { get; set; }
+
+        [Required]
+        [ForeignKey("ContactInformationId")]
+        public ContactInformation ContactInformation { get; set; }
+        public Guid ContactInformationId { get; set; }
 
         public ICollection<Employee> Employees { get; set; }
         public ICollection<Patient> Patients { get; set; }
@@ -150,21 +124,20 @@ namespace HealthcareAnalytics.Models
 
     }
 
-
-    public class HosptialDBContext : DbContext
+    public class HospitalDBContext : DbContext
     {
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Patient> Patients { get; set; }
 
-        public HosptialDBContext() : base("DefaultConnection")
+        public HospitalDBContext() : base("DefaultConnection")
         {
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().ToTable("Employees");
-            modelBuilder.Entity<Person>().ToTable("Patients");
+            modelBuilder.Entity<Patient>().ToTable("Patients");
 
             modelBuilder.Entity<Person>().HasRequired(m => m.HomeContactInfo).WithMany().HasForeignKey(m => m.HomeContactInfoId)
                 .WillCascadeOnDelete(false);

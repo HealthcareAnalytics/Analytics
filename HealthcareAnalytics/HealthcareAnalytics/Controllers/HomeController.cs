@@ -11,10 +11,10 @@ namespace HealthcareAnalytics.Controllers
     {
         public ActionResult Index()
         {
-            using (var db = new HosptialDBContext())
-            {
-                db.Employees.Find(Guid.NewGuid());
-            }
+            var db = new HospitalDBContext();
+            
+            db.Employees.Find(Guid.NewGuid());
+            
 
             return View();
         }
