@@ -142,10 +142,11 @@ namespace HealthcareAnalytics.Models
             ID = Guid.NewGuid();
         }
 
-        public Person(NameInformation nameInfo, ContactInformation homeContact, ContactInformation workContact)
+        public Person(NameInformation nameInfo, DateTime dob, ContactInformation homeContact, ContactInformation workContact)
         {
             ID = Guid.NewGuid();
             Name = nameInfo;
+            DateOfBirth = dob;
             HomeContactInfo = homeContact;
             WorkContactInfo = workContact;
             HomeContactInfoId = homeContact.ID;
@@ -155,6 +156,9 @@ namespace HealthcareAnalytics.Models
         [Key]
         [Required]
         public Guid ID { get; private set; }
+
+        [Required]
+        public  DateTime DateOfBirth { get; set; }
 
         [Required]
         [ForeignKey("NameId")]
