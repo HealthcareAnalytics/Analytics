@@ -18,27 +18,8 @@ namespace HealthcareAnalytics.Controllers
         // GET: Patients
         public ActionResult Index()
         {
-            //var patients = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo).Include(p => p.Branch).;
-
-            //var query = from pat in db.People
-            //            join ppl in db.Patients on pat.ID equals ppl.ID
-            //            join home in db.ContactInformations on ppl.HomeContactInfoId equals home.ID
-            //            join work in db.ContactInformations on ppl.WorkContactInfoId equals work.ID
-            //            join name in db.NameDetails on ppl.NameDetailsId equals name.ID
-            //            select new
-            //            {
-            //                FirstName = name.FirstName,
-            //                LastName = name.LastName
-            //            };
-
-            var patients = new PatientsViewModel();
-            patients.People = db.People;
-            patients.Patients = db.Patients;
-            patients.HomeContactInfos = db.ContactInformations;
-            patients.WorkContactInfos = db.ContactInformations;
-            patients.NameDetails = db.NameDetails;
-
-            return View(patients);
+            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo);
+            return View(people.ToList());
         }
 
         // GET: Patients/Details/5
