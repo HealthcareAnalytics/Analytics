@@ -17,7 +17,7 @@ namespace HealthcareAnalytics.Controllers
         // GET: Patients
         public ActionResult Index()
         {
-            var people = db.People.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo);
+            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo);
             return View(people.ToList());
         }
 
