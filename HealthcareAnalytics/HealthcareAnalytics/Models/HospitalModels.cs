@@ -143,7 +143,9 @@ namespace HealthcareAnalytics.Models
         public DbSet<NameDetails> NameDetails { get; set; }
         public DbSet<EmploymentDetails> EmployementDetails { get; set; }
         public DbSet<CheckinDetails> CheckinDetails { get; set; }
-
+        public DbSet<Person> People { get; set; }
+        public DbSet<EmploymentDetails> EmploymentDetails { get; set; }
+        public DbSet<Incident> Incidents { get; set; }
 
         public HospitalDBContext() : base("DefaultConnection")
         {
