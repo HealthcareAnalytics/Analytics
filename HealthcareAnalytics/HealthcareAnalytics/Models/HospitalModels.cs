@@ -12,7 +12,11 @@ namespace HealthcareAnalytics.Models
 {
     public class EmploymentDetails
     {
-        
+        public EmploymentDetails()
+        {
+            ID = Guid.NewGuid();
+        }
+
         [Key]
         [ScaffoldColumn(false)]
         public Guid ID { get; set; }
@@ -35,6 +39,12 @@ namespace HealthcareAnalytics.Models
 
     public class CheckinDetails
     {
+
+        public CheckinDetails()
+        {
+            ID = Guid.NewGuid();
+        }
+
         [Key]
         [ScaffoldColumn(false)]
         public Guid ID { get; set; }
@@ -129,12 +139,14 @@ namespace HealthcareAnalytics.Models
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<ContactInformation> ContactInformations { get; set; }
+        public DbSet<NameDetails> NameDetails { get; set; }
+        public DbSet<EmploymentDetails> EmployementDetails { get; set; }
+        public DbSet<CheckinDetails> CheckinDetails { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<EmploymentDetails> EmploymentDetails { get; set; }
-        public DbSet<CheckinDetails> CheckinDetails { get; set; }
         public DbSet<Incident> Incidents { get; set; }
-        public DbSet<NameDetails> NameDetails { get; set; }
-        public DbSet<ContactInformation> ContactInformations { get; set; }
+
         public HospitalDBContext() : base("DefaultConnection")
         {
         }

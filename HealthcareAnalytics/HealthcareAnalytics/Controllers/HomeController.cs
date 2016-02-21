@@ -14,7 +14,6 @@ namespace HealthcareAnalytics.Controllers
             var db = new HospitalDBContext();
             
             db.Employees.Find(Guid.NewGuid());
-            
 
             return View();
         }

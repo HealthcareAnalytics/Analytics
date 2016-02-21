@@ -102,11 +102,11 @@ namespace HealthcareAnalytics.Models
 
         [Required(ErrorMessage = "A zip or postal code is required")]
         [DisplayName("Postal/Zip Code")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Provided postal/zip code not valid")]
+        [DataType(DataType.PostalCode, ErrorMessage = "Provided postal/zip code not valid")]
         public string ZipPostalCode { get; set; }
 
         [DisplayName("Phone")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Provided phone number not valid")]
+        //[DataType(DataType.PhoneNumber, ErrorMessage = "Provided phone number not valid")]
         public string PhoneNumber { get; set; }
 
         [DisplayName("Cell")]
@@ -137,7 +137,7 @@ namespace HealthcareAnalytics.Models
         public  DateTime DateOfBirth { get; set; }
 
         [Required]
-        [CustomValidation(typeof(TitleValidationAttribute), "IsValidTitle")]
+        [CustomValidation(typeof(GenderValidation), "IsValidGender")]
         [StringLength(1)]
         public string Gender { get; set; }
 
