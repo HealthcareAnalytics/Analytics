@@ -141,7 +141,6 @@ namespace HealthcareAnalytics.Models
         public DbSet<Patient> Patients { get; set; }
         public DbSet<ContactInformation> ContactInformations { get; set; }
         public DbSet<NameDetails> NameDetails { get; set; }
-        public DbSet<EmploymentDetails> EmployementDetails { get; set; }
         public DbSet<CheckinDetails> CheckinDetails { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<EmploymentDetails> EmploymentDetails { get; set; }
