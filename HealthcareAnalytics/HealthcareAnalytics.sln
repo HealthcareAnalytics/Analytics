@@ -5,11 +5,11 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthcareAnalytics", "HealthcareAnalytics\HealthcareAnalytics.csproj", "{2B363FD9-E929-4536-9371-DF8EC46226B7}"
 EndProject
-<<<<<<< HEAD
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationTests", "AutomationTests\AutomationTests.csproj", "{A5E3538C-40B0-44AD-BA8E-DD420C2E0779}"
-=======
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyticsDataSeeder", "AnalyticsDataSeeder\AnalyticsDataSeeder.csproj", "{1D81774F-94A6-425B-BAE9-905726531FBE}"
->>>>>>> 5de4492adf566002eddded22865942057230e14b
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +21,17 @@ Global
 		{2B363FD9-E929-4536-9371-DF8EC46226B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B363FD9-E929-4536-9371-DF8EC46226B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B363FD9-E929-4536-9371-DF8EC46226B7}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD
+
 		{A5E3538C-40B0-44AD-BA8E-DD420C2E0779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5E3538C-40B0-44AD-BA8E-DD420C2E0779}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5E3538C-40B0-44AD-BA8E-DD420C2E0779}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5E3538C-40B0-44AD-BA8E-DD420C2E0779}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
+
 		{1D81774F-94A6-425B-BAE9-905726531FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D81774F-94A6-425B-BAE9-905726531FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D81774F-94A6-425B-BAE9-905726531FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D81774F-94A6-425B-BAE9-905726531FBE}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> 5de4492adf566002eddded22865942057230e14b
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
