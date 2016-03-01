@@ -67,3 +67,11 @@
 }
 
 </table>
+<ul class="pagination">
+    @for (int i = 1; i <= ViewBag.Total / ViewBag.ResultsPerPage; i++)
+    {
+        <li>
+            @Html.ActionLink("" + i.ToString("00"), "Index/" + i, i)
+        </li>
+    }
+</ul>
