@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
+using System.ComponentModel;
 
 namespace HealthcareAnalytics.Controllers
 {
@@ -15,10 +16,50 @@ namespace HealthcareAnalytics.Controllers
         private HospitalDBContext db = new HospitalDBContext();
 
         // GET: Patients
-        public ActionResult Index()
+        public ActionResult Index([DefaultValue(1)] int id)
         {
-            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo);
+            
+
+
+            var currentPage = (id > 0) ? id : 1;
+            int pageSize = 10;
+
+            int total = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo).Count();
+
+            var totalPages = (int)Math.Ceiling((decimal)total / (decimal)pageSize);
+            var startPage = currentPage - 5;
+            var endPage = currentPage + 4;
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 10)
+                {
+                    startPage = endPage - 9;
+                }
+            }
+
+            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo)
+                .OrderBy(e => e.ID)
+                .Skip(pageSize * (currentPage - 1))
+                .Take(pageSize);
+
+            ViewBag.TotalItems = total;
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.StartPage = startPage;
+            ViewBag.EndPage = endPage;
+
             return View(people.ToList());
+
+
+
+
         }
 
         // GET: Patients/Details/5

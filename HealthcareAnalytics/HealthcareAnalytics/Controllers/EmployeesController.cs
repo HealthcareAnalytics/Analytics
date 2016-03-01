@@ -7,17 +7,53 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
+using PagedList;
+using System.ComponentModel;
 
 namespace HealthcareAnalytics.Controllers
 {
+   // [RoutePrefix("Employees")]
     public class EmployeesController : Controller
     {
         private HospitalDBContext db = new HospitalDBContext();
 
         // GET: Employees
-        public ActionResult Index()
-        {
-            var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo);
+        public ActionResult Index([DefaultValue(1)] int id) {
+           
+            var currentPage = (id > 0) ? id : 1;
+            int pageSize = 10;
+
+            int total = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo).Count();
+
+            var totalPages = (int)Math.Ceiling((decimal)total / (decimal)pageSize);
+            var startPage = currentPage - 5;
+            var endPage = currentPage + 4;
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 10)
+                {
+                    startPage = endPage - 9;
+                }
+            }
+
+            var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo)
+                .OrderBy(e => e.ID)
+                .Skip(pageSize * (currentPage - 1))
+                .Take(pageSize);
+
+            ViewBag.TotalItems = total;
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.StartPage = startPage;
+            ViewBag.EndPage = endPage;
+
             return View(people.ToList());
         }
 
