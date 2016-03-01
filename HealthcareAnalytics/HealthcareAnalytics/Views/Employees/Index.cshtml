@@ -62,11 +62,34 @@
 
 </table>
 
-<ul class="pagination">
-    @for (int i = 1; i <= ViewBag.Total / ViewBag.ResultsPerPage; i++)
-    {
-        <li>
-            @Html.ActionLink(""+i.ToString("00"), "Index/" +i, i)
-        </li>
-    }
-</ul>
+
+@if (ViewBag.EndPage > 1)
+{
+    <ul class="pagination">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li>
+                <a href="~/Employees/Index">First</a>
+            </li>
+                            <li>
+                                <a href="~/Employees/Index/@(ViewBag.CurrentPage - 1)">Previous</a>
+                            </li>
+        }
+
+        @for (var page = ViewBag.StartPage; page <= ViewBag.EndPage; page++)
+        {
+            <li class="@(page == ViewBag.CurrentPage ? "active" : "")">
+                <a href="~/Employees/Index/@page">@page</a>
+            </li>    }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li>
+                <a href="~/Employees/Index/@(ViewBag.CurrentPage + 1)">Next</a>
+            </li>
+            <li>
+                <a href="~/Employees/Index/@(ViewBag.TotalPages)">Last</a>
+            </li>
+        }
+    </ul>
+}
