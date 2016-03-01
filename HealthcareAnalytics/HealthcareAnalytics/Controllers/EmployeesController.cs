@@ -19,22 +19,40 @@ namespace HealthcareAnalytics.Controllers
 
         // GET: Employees
         public ActionResult Index([DefaultValue(1)] int id) {
-            int pageNumber = 1;
-         
-            pageNumber = (id > 0) ? id : 1;
-  
-            int numberOfObjectsPerPage = 10;
+           
+            var currentPage = (id > 0) ? id : 1;
+            int pageSize = 10;
 
             int total = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo).Count();
 
+            var totalPages = (int)Math.Ceiling((decimal)total / (decimal)pageSize);
+            var startPage = currentPage - 5;
+            var endPage = currentPage + 4;
+            if (startPage <= 0)
+            {
+                endPage -= (startPage - 1);
+                startPage = 1;
+            }
+            if (endPage > totalPages)
+            {
+                endPage = totalPages;
+                if (endPage > 10)
+                {
+                    startPage = endPage - 9;
+                }
+            }
+
             var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo)
                 .OrderBy(e => e.ID)
-                .Skip(numberOfObjectsPerPage * (pageNumber-1))
-                .Take(numberOfObjectsPerPage);
+                .Skip(pageSize * (currentPage - 1))
+                .Take(pageSize);
 
-            ViewBag.PageNumber = pageNumber;
-            ViewBag.ResultsPerPage = numberOfObjectsPerPage;
-            ViewBag.Total = total;
+            ViewBag.TotalItems = total;
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.StartPage = startPage;
+            ViewBag.EndPage = endPage;
 
             return View(people.ToList());
         }
