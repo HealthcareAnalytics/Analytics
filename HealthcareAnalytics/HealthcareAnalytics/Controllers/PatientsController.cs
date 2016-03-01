@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
+using System.ComponentModel;
 
 namespace HealthcareAnalytics.Controllers
 {
@@ -15,9 +16,24 @@ namespace HealthcareAnalytics.Controllers
         private HospitalDBContext db = new HospitalDBContext();
 
         // GET: Patients
-        public ActionResult Index()
+        public ActionResult Index([DefaultValue(1)] int id)
         {
-            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo);
+            int pageNumber = 1;
+
+            pageNumber = (id > 0) ? id : 1;
+
+            int numberOfObjectsPerPage = 10;
+
+            int total = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo).Count();
+            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo)
+                .OrderBy(e => e.ID)
+                .Skip(numberOfObjectsPerPage * (pageNumber - 1))
+                .Take(numberOfObjectsPerPage);
+
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.ResultsPerPage = numberOfObjectsPerPage;
+            ViewBag.Total = total;
+
             return View(people.ToList());
         }
 
