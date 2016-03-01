@@ -87,7 +87,7 @@ namespace HealthcareAnalytics.Models
         public Branch Branch { get; set; }
     }
 
-    // TODO: Incident model is incomplete
+    // TODO: Incident model is very basic right now
     public class Incident
     {
         public Incident()
@@ -102,9 +102,49 @@ namespace HealthcareAnalytics.Models
 
         [Required]
         public Guid BranchId { get; set; }
+
         [ForeignKey("BranchId")]
         public Branch Branch { get; set; }
 
+        [Required]
+        public Guid EmployeeId { get; set; }
+
+        [ForeignKey("EmployeeId")]
+        public Employee Employee { get; set; }
+
+        [Required]
+        public Guid PatientId { get; set; }
+
+        [ForeignKey("PatientId")]
+        public Patient Patient { get; set; }
+
+        [ForeignKey("IncidentTypeId")]
+        public IncidentType IncidentType { get; set; }
+        [Required]
+        public int IncidentTypeId { get; set; }
+
+        [Required]
+        public DateTime DateAndTime { get; set; }
+
+        [Required]
+        public string Location { get; set; }
+
+        [Required]
+        public string Details { get; set; }
+
+        public string FollowUpActions { get; set; }
+    }
+
+
+    public class IncidentType
+    {
+        [Key]
+        [Required]
+        [ScaffoldColumn(false)]
+        public int ID { get; set; }
+        
+        [Required]
+        public string Name { get; set; }
     }
 
     public class Branch
@@ -145,6 +185,7 @@ namespace HealthcareAnalytics.Models
         public DbSet<Person> People { get; set; }
         public DbSet<EmploymentDetails> EmploymentDetails { get; set; }
         public DbSet<Incident> Incidents { get; set; }
+        public DbSet<IncidentType> IncidentTypes { get; set; }
 
         public HospitalDBContext() : base("DefaultConnection")
         {
@@ -155,10 +196,10 @@ namespace HealthcareAnalytics.Models
             modelBuilder.Entity<Employee>().ToTable("Employees");
             modelBuilder.Entity<Patient>().ToTable("Patients");
 
-            modelBuilder.Entity<Person>().HasRequired(m => m.HomeContactInfo).WithMany().HasForeignKey(m => m.HomeContactInfoId)
-                .WillCascadeOnDelete(false);
-            modelBuilder.Entity<Person>().HasRequired(m => m.WorkContactInfo).WithMany().HasForeignKey(m => m.WorkContactInfoId)
-                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<Person>().HasRequired(m => m.HomeContactInfo).WithMany()
+                .HasForeignKey(m => m.HomeContactInfoId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Person>().HasRequired(m => m.WorkContactInfo).WithMany()
+                .HasForeignKey(m => m.WorkContactInfoId).WillCascadeOnDelete(false);
         }
     }
 }
