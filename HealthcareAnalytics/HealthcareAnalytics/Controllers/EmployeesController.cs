@@ -7,17 +7,35 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
+using PagedList;
+using System.ComponentModel;
 
 namespace HealthcareAnalytics.Controllers
 {
+   // [RoutePrefix("Employees")]
     public class EmployeesController : Controller
     {
         private HospitalDBContext db = new HospitalDBContext();
 
         // GET: Employees
-        public ActionResult Index()
-        {
-            var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo);
+        public ActionResult Index([DefaultValue(1)] int id) {
+            int pageNumber = 1;
+         
+            pageNumber = (id > 0) ? id : 1;
+  
+            int numberOfObjectsPerPage = 10;
+
+            int total = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo).Count();
+
+            var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo)
+                .OrderBy(e => e.ID)
+                .Skip(numberOfObjectsPerPage * (pageNumber-1))
+                .Take(numberOfObjectsPerPage);
+
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.ResultsPerPage = numberOfObjectsPerPage;
+            ViewBag.Total = total;
+
             return View(people.ToList());
         }
 
