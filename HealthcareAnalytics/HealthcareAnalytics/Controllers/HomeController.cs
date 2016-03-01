@@ -11,9 +11,9 @@ namespace HealthcareAnalytics.Controllers
     {
         public ActionResult Index()
         {
-//            var db = new HospitalDBContext();
-            
-            //db.Employees.Find(Guid.NewGuid());
+            var db = new HospitalDBContext();
+
+            db.Employees.Find(Guid.NewGuid());
 
             return View();
         }

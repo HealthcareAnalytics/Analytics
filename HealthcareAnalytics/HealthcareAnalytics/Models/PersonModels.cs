@@ -52,7 +52,7 @@ namespace HealthcareAnalytics.Models
         [ScaffoldColumn(false)]
         public Guid ID { get; set; }
 
-        [CustomValidation(typeof(TitleValidationAttribute), "IsValidTitle")]
+        //[CustomValidation(typeof(TitleValidationAttribute), "IsValidTitle")]
         [Required(ErrorMessage = "A title is required")]
         [DisplayName("Title")]
         public string Title { get; set; }
@@ -102,7 +102,7 @@ namespace HealthcareAnalytics.Models
 
         [Required(ErrorMessage = "A zip or postal code is required")]
         [DisplayName("Postal/Zip Code")]
-        [DataType(DataType.PostalCode, ErrorMessage = "Provided postal/zip code not valid")]
+        //[DataType(DataType.PostalCode, ErrorMessage = "Provided postal/zip code not valid")]
         public string ZipPostalCode { get; set; }
 
         [DisplayName("Phone")]
@@ -110,15 +110,15 @@ namespace HealthcareAnalytics.Models
         public string PhoneNumber { get; set; }
 
         [DisplayName("Cell")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Provided cell phone number not valid")]
+        //[DataType(DataType.PhoneNumber, ErrorMessage = "Provided cell phone number not valid")]
         public string CellPhoneNumber { get; set; }
 
         [DisplayName("Fax")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Provided fax number not valid")]
+        //[DataType(DataType.PhoneNumber, ErrorMessage = "Provided fax number not valid")]
         public string FaxNumber { get; set; }
 
         [Required(ErrorMessage = "An email is required")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Provided email number not valid")]
+        //[DataType(DataType.EmailAddress, ErrorMessage = "Provided email not valid")]
         public string Email { get; set; }
     }
 
@@ -137,23 +137,23 @@ namespace HealthcareAnalytics.Models
         public  DateTime DateOfBirth { get; set; }
 
         [Required]
-        [CustomValidation(typeof(GenderValidation), "IsValidGender")]
-        [StringLength(1)]
+        //[CustomValidation(typeof(GenderValidation), "IsValidGender")]
+        //[StringLength(1)]
         public string Gender { get; set; }
 
-        [Required]
         [ForeignKey("NameDetailsId")]
         public NameDetails NameDetails { get; set; }
+        [Required]
         public Guid NameDetailsId { get; set; }
 
-        [Required]
         [ForeignKey("HomeContactInfoId")]
         public ContactInformation HomeContactInfo { get; set; }
+        [Required]
         public Guid HomeContactInfoId { get; set; }
 
-        [Required]
         [ForeignKey("WorkContactInfoId")]
         public ContactInformation WorkContactInfo { get; set; }
+        [Required]
         public Guid WorkContactInfoId { get; set; }
 
     }

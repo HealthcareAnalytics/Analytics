@@ -183,7 +183,6 @@
     <Compile Include="Models\PersonModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\PatientViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\insert_data.sql" />
@@ -240,7 +239,6 @@
     <Content Include="Views\People\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
