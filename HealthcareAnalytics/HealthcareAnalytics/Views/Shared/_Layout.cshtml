@@ -25,9 +25,19 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Patients", "Index", "Patients")</li>
                     <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Incidents<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="Incidents/General/">General Incident</a></li>
+                            <li><a href="Incidents/Complaint/">Complaint</a></li>
+                            <li><a href="Incidents/Fall/">Fall</a></li>
+                        </ul>
+                    </li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+
+                        @Html.Partial("_LoginPartial")
             </div>
+
         </div>
     </div>
     <div class="container body-content">
@@ -43,3 +53,6 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+
+
