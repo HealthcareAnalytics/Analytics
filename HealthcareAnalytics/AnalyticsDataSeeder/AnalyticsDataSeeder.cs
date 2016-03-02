@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HealthcareAnalytics.Models;
 
@@ -9,16 +10,31 @@ namespace AnalyticsDataSeeder
 {
     class AnalyticsDataSeeder
     {
-        static void Main(string[] args)
+        Branch[] branches;
+        private List<IncidentType> types;
+
+        public AnalyticsDataSeeder()
         {
-            new AnalyticsDataSeeder().Run();
+            branches = new Branch[3];
         }
 
-        public void Run()
+        static void Main(string[] args)
         {
-            Console.WriteLine("Data seeding process started...");
+            AnalyticsDataSeeder a = new AnalyticsDataSeeder();
 
+            a.RunBase();
+
+            new Thread(a.Run).Start();
+            new Thread(a.Run).Start();
+            new Thread(a.Run).Start();
+
+            a.Run();
+        }
+
+        public void RunBase()
+        {
             HospitalDBContext context = new HospitalDBContext();
+            Console.WriteLine("Creating Branches...");
 
             int streetStart = 1;
             string[] cities = new string[] { "Richmond", "Vancouver", "Coquitlam", "Burnaby", "Surrey", "Victoria" };
@@ -33,24 +49,21 @@ namespace AnalyticsDataSeeder
 
             ContactInformation b1Contact = new ContactInformation();
             b1Contact.Street = streetStart++ + " Main Street";
-            b1Contact.City = cities[(new Random()).Next(0, cities.Length - 1)];
+            b1Contact.City = cities[r.Next(0, cities.Length)];
             b1Contact.ZipPostalCode = postal;
             b1Contact.ProvinceState = provinceStart;
             b1Contact.Country = country;
-            b1Contact.PhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-            b1Contact.FaxNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-            b1Contact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
+            b1Contact.PhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+            b1Contact.FaxNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+            b1Contact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
             b1Contact.Email = email;
 
             Branch b1 = new Branch();
             b1.BranchName = "Vancouver General Hospital";
             b1.ContactInformationId = b1Contact.ID;
             b1.ContactInformation = b1Contact;
-            Console.WriteLine("test");
-
             context.ContactInformations.Add(b1Contact);
             context.SaveChanges();
-            Console.WriteLine("test");
 
             context.Branches.Add(b1);
             context.SaveChanges();
@@ -99,31 +112,72 @@ namespace AnalyticsDataSeeder
             context.Branches.Add(b3);
             context.SaveChanges();
 
+            branches[0] = b1;
+            branches[1] = b2;
+            branches[2] = b3;
+
+            Console.WriteLine("Creating Incidents...");
+            //Create Incident Types
+            IncidentType general = new IncidentType();
+            general.ID = 1;
+            general.Name = "General Incident";
+
+            context.IncidentTypes.Add(general);
+            context.SaveChanges();
+
+            IncidentType complaint = new IncidentType();
+            complaint.ID = 2;
+            complaint.Name = "Complaint";
+
+            context.IncidentTypes.Add(complaint);
+            context.SaveChanges();
+
+            IncidentType fall = new IncidentType();
+            fall.ID = 3;
+            fall.Name = "Fall";
+
+            context.IncidentTypes.Add(fall);
+            context.SaveChanges();
+
+            types = new List<IncidentType>() { general, complaint, fall };
+        }
+
+        public void Run()
+        {
+            HospitalDBContext context = new HospitalDBContext();
+            Random r = new Random();
+            int streetStart = 1;
+            string[] cities = new string[] { "Richmond", "Vancouver", "Coquitlam", "Burnaby", "Surrey", "Victoria" };
+            string provinceStart = "BC";
+            string postal = "A1B 2C3";
+            string country = "CA";
+            string basePhone = "604{0}{1}";
+            string email = "bob.jones@gmail.com";
+
+            Console.WriteLine("Data seeding process started...");
 
             string[] titles = new string[] { "Dr.", "Mr.", "Mrs.", "Ms.", "Sir" };
             string[] firstNames = new string[] { "Peter", "Lois", "Stuey", "Bob", "Nancy", "Sarah", "John", "David", "Amy", "Michelle", "Sean", "Brandon", "Renan" };
             string[] lastNames = new string[] { "Griffin", "Love", "Hope", "Lavergne", "Tran", "Aguiar", "Luo", "Smith", "Le", "Nguyen", "Cho", "Lenni" };
             string[] genders = new string[] { "M", "F" };
-            Branch[] branches = { b1, b2, b3 };
             string[] positions = { "Doctor", "Nurse", "Janitor", "Receptionist", "Intern", "EMT" };
             string[] departments = { "Pediatrics", "Emergency", "Cardiology", "Radiology", "ICU", "Marternity" };
             string[] streetBase = { " Broadway Street", " Lakewood Street", " Royal Oak Street", " Main Street", " 1st Ave", " 13th Ave" };
             int medicareCardNumber = 1000000000;
+            List<Employee> employees = new List<Employee>();
 
             // Create Employees
-            for (int i = 0; i < 300; i++)
+            for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine(i);
-
                 ContactInformation homeContact = new ContactInformation();
-                homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length - 1)];
-                homeContact.City = cities[(new Random()).Next(0, cities.Length - 1)];
+                homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length)];
+                homeContact.City = cities[r.Next(0, cities.Length)];
                 homeContact.ZipPostalCode = postal;
                 homeContact.ProvinceState = provinceStart;
                 homeContact.Country = country;
-                homeContact.PhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                homeContact.FaxNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                homeContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
+                homeContact.PhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                homeContact.FaxNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                homeContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
                 homeContact.Email = email;
 
                 context.ContactInformations.Add(homeContact);
@@ -131,11 +185,11 @@ namespace AnalyticsDataSeeder
 
                 NameDetails nameDetails = new NameDetails();
                 nameDetails.Title = titles[r.Next(0, titles.Length)];
-                nameDetails.FirstName = firstNames[r.Next(0, firstNames.Length - 1)];
-                nameDetails.LastName = lastNames[r.Next(0, lastNames.Length - 1)];
-                nameDetails.MiddleName = firstNames[r.Next(0, firstNames.Length - 1)];
-                nameDetails.MaidenName = lastNames[r.Next(0, lastNames.Length - 1)];
-                nameDetails.NickName = firstNames[r.Next(0, firstNames.Length - 1)];
+                nameDetails.FirstName = firstNames[r.Next(0, firstNames.Length)];
+                nameDetails.LastName = lastNames[r.Next(0, lastNames.Length)];
+                nameDetails.MiddleName = firstNames[r.Next(0, firstNames.Length)];
+                nameDetails.MaidenName = lastNames[r.Next(0, lastNames.Length)];
+                nameDetails.NickName = firstNames[r.Next(0, firstNames.Length)];
 
                 context.NameDetails.Add(nameDetails);
                 context.SaveChanges();
@@ -155,39 +209,43 @@ namespace AnalyticsDataSeeder
                 details.EmployeeId = employee.ID;
                 details.StartDate = DateTime.Today;
                 details.TerminationDate = DateTime.Today;
-                details.Position = positions[r.Next(0, positions.Length - 1)];
-                details.Department = departments[r.Next(0, departments.Length - 1)];
+                details.Position = positions[r.Next(0, positions.Length)];
+                details.Department = departments[r.Next(0, departments.Length)];
 
-                context.EmployementDetails.Add(details);
+                context.EmploymentDetails.Add(details);
                 context.SaveChanges();
+
+                employees.Add(employee);
             }
 
+            string[] locations = {"Hallway", "Washroom", "Bedroom", "Front Desk", "Love Chambers"};
+            
             // Create Patients
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 2500; i++)
             {
                 ContactInformation homeContact = new ContactInformation();
-                homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length - 1)];
-                homeContact.City = cities[(new Random()).Next(0, cities.Length - 1)];
+                homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length)];
+                homeContact.City = cities[r.Next(0, cities.Length)];
                 homeContact.ZipPostalCode = postal;
                 homeContact.ProvinceState = provinceStart;
                 homeContact.Country = country;
-                homeContact.PhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                homeContact.FaxNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                homeContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
+                homeContact.PhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                homeContact.FaxNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                homeContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
                 homeContact.Email = email;
 
                 context.ContactInformations.Add(homeContact);
                 context.SaveChanges();
 
                 ContactInformation workContact = new ContactInformation();
-                workContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length - 1)];
-                workContact.City = cities[(new Random()).Next(0, cities.Length - 1)];
+                workContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length)];
+                workContact.City = cities[r.Next(0, cities.Length)];
                 workContact.ZipPostalCode = postal;
                 workContact.ProvinceState = provinceStart;
                 workContact.Country = country;
-                workContact.PhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                workContact.FaxNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
-                workContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 999), r.Next(1000, 9999));
+                workContact.PhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                workContact.FaxNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
+                workContact.CellPhoneNumber = string.Format(basePhone, r.Next(100, 1000), r.Next(1000, 10000));
                 workContact.Email = email;
 
                 context.ContactInformations.Add(workContact);
@@ -195,18 +253,18 @@ namespace AnalyticsDataSeeder
 
                 NameDetails nameDetails = new NameDetails();
                 nameDetails.Title = titles[r.Next(0, titles.Length)];
-                nameDetails.FirstName = firstNames[r.Next(0, firstNames.Length - 1)];
-                nameDetails.LastName = lastNames[r.Next(0, lastNames.Length - 1)];
-                nameDetails.MiddleName = firstNames[r.Next(0, firstNames.Length - 1)];
-                nameDetails.MaidenName = lastNames[r.Next(0, lastNames.Length - 1)];
-                nameDetails.NickName = firstNames[r.Next(0, firstNames.Length - 1)];
+                nameDetails.FirstName = firstNames[r.Next(0, firstNames.Length)];
+                nameDetails.LastName = lastNames[r.Next(0, lastNames.Length)];
+                nameDetails.MiddleName = firstNames[r.Next(0, firstNames.Length)];
+                nameDetails.MaidenName = lastNames[r.Next(0, lastNames.Length)];
+                nameDetails.NickName = firstNames[r.Next(0, firstNames.Length)];
 
                 context.NameDetails.Add(nameDetails);
                 context.SaveChanges();
 
                 Patient patient = new Patient();
                 patient.DateOfBirth = DateTime.Today;
-                patient.Gender = genders[r.Next(0, 1)];
+                patient.Gender = genders[r.Next(0, 2)];
                 patient.NameDetailsId = nameDetails.ID;
                 patient.HomeContactInfoId = homeContact.ID;
                 patient.WorkContactInfoId = branches[i % 3].ContactInformationId;
@@ -225,6 +283,38 @@ namespace AnalyticsDataSeeder
 
                 context.CheckinDetails.Add(details);
                 context.SaveChanges();
+
+                List<Employee> myEmployees = employees.Where(e => e.BranchId == patient.BranchId).ToList();
+                //Create incidents for Patient
+                int noOfIncidents = r.Next(1, 11);
+                for (int x = 0; x < noOfIncidents; x++)
+                {
+                    Incident incident = new Incident();
+                    incident.BranchId = patient.BranchId;
+                    incident.EmployeeId = myEmployees[r.Next(0, myEmployees.Count())].ID;
+                    incident.Location = locations[r.Next(0, locations.Length)];
+                    incident.PatientId = patient.ID;
+                    incident.DateAndTime = DateTime.Today;
+                    incident.IncidentTypeId = r.Next(1, types.Count);
+                    incident.Details = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                                       "sed do eiusmod tempor incididunt ut labore et dolore magna " +
+                                       "aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco " +
+                                       "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor" +
+                                       " in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla" +
+                                       " pariatur. Excepteur sint occaecat cupidatat non proident, sunt in " +
+                                       "culpa qui officia deserunt mollit anim id est laborum.";
+                    incident.FollowUpActions = "Lorem ipsum dolor sit amet, consectetur adipiscing " +
+                                               "elit, sed do eiusmod tempor incididunt ut labore et dolor" +
+                                               "e magna aliqua. Ut enim ad minim veniam, quis nostrud exer" +
+                                               "citation ullamco laboris nisi ut aliquip ex ea commodo co" +
+                                               "nsequat. Duis aute irure dolor in reprehenderit in volup" +
+                                               "tate velit esse cillum dolore eu fugiat nulla pariatur. Exce" +
+                                               "pteur sint occaecat cupidatat non proident, sunt in culpa q" +
+                                               "ui officia deserunt mollit anim id est laborum.";
+
+                    context.Incidents.Add(incident);
+                    context.SaveChanges();
+                }
             }
 
             Console.WriteLine("Data seeding process completed.");
