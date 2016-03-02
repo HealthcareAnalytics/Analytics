@@ -1,0 +1,105 @@
+﻿@model IEnumerable<HealthcareAnalytics.Models.Incident>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Branch.BranchName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employee.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IncidentType.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateAndTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Details)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FollowUpActions)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Branch.BranchName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IncidentType.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Patient.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateAndTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Details)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FollowUpActions)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
+@if (ViewBag.EndPage > 1)
+{
+    <ul class="pagination">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li>
+                <a href="~/Incidents/Index">First</a>
+            </li>
+            <li>
+                <a href="~/Incidents/Index/@(ViewBag.CurrentPage - 1)">Previous</a>
+            </li>
+        }
+
+        @for (var page = ViewBag.StartPage; page <= ViewBag.EndPage; page++)
+        {
+            <li class="@(page == ViewBag.CurrentPage ? "active" : "")">
+                <a href="~/Incidents/Index/@page">@page</a>
+            </li>    }
+
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li>
+                <a href="~/Incidents/Index/@(ViewBag.CurrentPage + 1)">Next</a>
+            </li>
+            <li>
+                <a href="~/Incidents/Index/@(ViewBag.TotalPages)">Last</a>
+            </li>
+        }
+    </ul>
+}
