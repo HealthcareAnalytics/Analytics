@@ -7,7 +7,6 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
-using PagedList;
 using System.ComponentModel;
 
 namespace HealthcareAnalytics.Controllers
