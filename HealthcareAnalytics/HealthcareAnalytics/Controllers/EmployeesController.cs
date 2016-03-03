@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
 using System.ComponentModel;
+using HealthcareAnalytics.ViewModels;
 
 namespace HealthcareAnalytics.Controllers
 {
@@ -41,7 +42,10 @@ namespace HealthcareAnalytics.Controllers
                 }
             }
 
-            var employees = db.Employees.Include(e => e.NameDetails).Include(e => e.EmploymentDetails)
+            var employees = db.Employees
+                .Include(e => e.NameDetails)
+                .Include(e => e.EmploymentDetails)
+                .Include(e => e.HomeContactInfo)
                 .OrderBy(e => e.ID)
                 .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize);
@@ -63,12 +67,20 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+
+            Employee employee = db.Employees
+                .Include(e => e.NameDetails)
+                .Include(e => e.EmploymentDetails)
+                .Include(e => e.HomeContactInfo)
+                .Include(e => e.Branch)
+                .SingleOrDefault(e => e.ID == id);
+
             if (employee == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+
+            return View(new EmployeesDetailsViewModel() {Employee = employee});
         }
 
         // GET: Employees/Create

@@ -167,7 +167,7 @@ namespace HealthcareAnalytics.Models
         public Guid ID { get; set; }
 
         [Required]
-        [DisplayName("Branch Name")]
+        [DisplayName("Branch")]
         public string BranchName { get; set; }
 
         [Required]

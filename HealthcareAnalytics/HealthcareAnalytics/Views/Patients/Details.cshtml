@@ -1,74 +1,146 @@
-﻿@model HealthcareAnalytics.Models.Patient
+﻿@model HealthcareAnalytics.ViewModels.PatientsDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@(Model.FullName)</h2>
 
 <div>
     <h4>Patient</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.HomeContactInfo.Street)
+            @Html.DisplayNameFor(model => model.Patient.NameDetails.MaidenName)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.HomeContactInfo.Street)
+            @Html.DisplayFor(model => model.Patient.NameDetails.MaidenName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NameDetails.Title)
+            @Html.DisplayNameFor(model => model.Patient.NameDetails.NickName)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.NameDetails.Title)
+            @Html.DisplayFor(model => model.Patient.NameDetails.NickName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayNameFor(model => model.Patient.DateOfBirth)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayFor(model => model.Patient.DateOfBirth)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Patient.Gender)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Html.DisplayFor(model => model.Patient.Gender)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.DisplayNameFor(model => model.Patient.MedicareCardNumber)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.Patient.MedicareCardNumber)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FullAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.Street)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.City),&nbsp;
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.ProvinceState)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.ZipPostalCode)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.Country)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.MedicareCardNumber)
+            @Html.DisplayNameFor(model => model.Patient.HomeContactInfo.PhoneNumber)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.MedicareCardNumber)
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.PhoneNumber)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.Patient.HomeContactInfo.CellPhoneNumber)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Branch.BranchName)
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.CellPhoneNumber)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.HomeContactInfo.FaxNumber)
+        </dt>
+        <dd>
+            @Html.DisplayNameFor(model => model.Patient.HomeContactInfo.FaxNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.HomeContactInfo.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.HomeContactInfo.Email)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FullAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.Street)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.City),&nbsp;
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.ProvinceState)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.ZipPostalCode)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.Country)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.WorkContactInfo.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.WorkContactInfo.CellPhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.CellPhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.WorkContactInfo.FaxNumber)
+        </dt>
+        <dd>
+            @Html.DisplayNameFor(model => model.Patient.WorkContactInfo.FaxNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.WorkContactInfo.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.WorkContactInfo.Email)
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Patient.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

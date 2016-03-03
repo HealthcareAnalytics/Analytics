@@ -7,7 +7,7 @@ using HealthcareAnalytics.Models;
 
 namespace HealthcareAnalytics.ViewModels
 {
-    public class IncidentsViewModel
+    public class IncidentsDetailsViewModel
     {
         public Incident Incident { get; set; }
 
@@ -21,7 +21,7 @@ namespace HealthcareAnalytics.ViewModels
             }
         }
 
-        [DisplayName("Reported By")]
+        [DisplayName("Reporter")]
         public string EmployeeFullName
         {
             get
@@ -30,6 +30,5 @@ namespace HealthcareAnalytics.ViewModels
                     Incident.Employee.NameDetails.FirstName, Incident.Employee.NameDetails.MiddleName);
             }
         }
-
     }
 }

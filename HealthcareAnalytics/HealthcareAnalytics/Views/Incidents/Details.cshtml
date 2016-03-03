@@ -1,82 +1,74 @@
-﻿@model HealthcareAnalytics.Models.Incident
+﻿@model HealthcareAnalytics.ViewModels.IncidentsDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Incident</h2>
 
 <div>
-    <h4>Incident</h4>
+    <h4>Incident #@Model.Incident.ID</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.PatientFullName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Branch.BranchName)
+            @Html.DisplayFor(model => model.PatientFullName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Employee.Gender)
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Employee.Gender)
+            @Html.DisplayFor(model => model.EmployeeFullName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.IncidentType.Name)
+            @Html.DisplayNameFor(model => model.Incident.IncidentType.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.IncidentType.Name)
+            @Html.DisplayFor(model => model.Incident.IncidentType.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Patient.Gender)
+            @Html.DisplayNameFor(model => model.Incident.DateAndTime)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Patient.Gender)
+            @Html.DisplayFor(model => model.Incident.DateAndTime)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateAndTime)
+            @Html.DisplayNameFor(model => model.Incident.Location)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DateAndTime)
+            @Html.DisplayFor(model => model.Incident.Location)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Incident.Details)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.Incident.Details)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Details)
+            @Html.DisplayNameFor(model => model.Incident.FollowUpActions)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Details)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FollowUpActions)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FollowUpActions)
+            @Html.DisplayFor(model => model.Incident.FollowUpActions)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Incident.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

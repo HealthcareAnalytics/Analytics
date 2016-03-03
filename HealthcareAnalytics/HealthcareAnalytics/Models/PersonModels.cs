@@ -105,7 +105,7 @@ namespace HealthcareAnalytics.Models
         //[DataType(DataType.PostalCode, ErrorMessage = "Provided postal/zip code not valid")]
         public string ZipPostalCode { get; set; }
 
-        [DisplayName("Phone")]
+        [DisplayName("Primary Phone")]
         //[DataType(DataType.PhoneNumber, ErrorMessage = "Provided phone number not valid")]
         public string PhoneNumber { get; set; }
 

@@ -187,7 +187,10 @@
     <Compile Include="Models\PersonModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\IncidentsViewModel.cs" />
+    <Compile Include="ViewModels\EmployeesDetailsViewModel.cs" />
+    <Compile Include="ViewModels\IncidentsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\IncidentsIndexViewModel.cs" />
+    <Compile Include="ViewModels\PatientsDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-HealthcareAnalytics-20160215084807.mdf" />
