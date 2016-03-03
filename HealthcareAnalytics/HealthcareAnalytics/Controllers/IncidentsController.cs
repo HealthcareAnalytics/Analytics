@@ -9,6 +9,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
+using HealthcareAnalytics.ViewModels;
 
 namespace HealthcareAnalytics.Controllers
 {
@@ -17,10 +18,8 @@ namespace HealthcareAnalytics.Controllers
         private HospitalDBContext db = new HospitalDBContext();
 
         // GET: Incidents
-        public async Task<ActionResult> Index([DefaultValue(1)] int id)
+        public ActionResult Index([DefaultValue(1)] int id)
         {
-
-            
             var currentPage = (id > 0) ? id : 1;
             int pageSize = 10;
 
@@ -43,9 +42,14 @@ namespace HealthcareAnalytics.Controllers
                 }
             }
 
-            var incidents = db.Incidents.Include(i => i.Branch).Include(i => i.Employee).Include(i => i.IncidentType).Include(i => i.Patient)
+            var incidents = db.Incidents.Include(i => i.Branch)
+                .Include(i => i.Employee)
+                .Include(i => i.IncidentType)
+                .Include(i => i.Patient)
+                .Include(i => i.Patient.NameDetails)
+                .Include(i => i.Employee.NameDetails)
                 .OrderBy(i => i.ID)
-                .Skip(pageSize * (currentPage - 1))
+                .Skip(pageSize*(currentPage - 1))
                 .Take(pageSize);
 
             ViewBag.TotalItems = total;
@@ -55,17 +59,24 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.StartPage = startPage;
             ViewBag.EndPage = endPage;
 
-            return View(incidents.ToList());
+            List<IncidentsViewModel> incidentsViewModels = new List<IncidentsViewModel>();
+
+            foreach (Incident incident in incidents.ToList())
+            {
+                incidentsViewModels.Add(new IncidentsViewModel {Incident = incident});
+            }
+
+            return View(incidentsViewModels);
         }
 
         // GET: Incidents/Details/5
-        public async Task<ActionResult> Details(Guid? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Incident incident = await db.Incidents.FindAsync(id);
+            Incident incident = db.Incidents.Find(id);
             if (incident == null)
             {
                 return HttpNotFound();
@@ -88,13 +99,13 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
+        public ActionResult Create([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
         {
             if (ModelState.IsValid)
             {
                 incident.ID = Guid.NewGuid();
                 db.Incidents.Add(incident);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -106,13 +117,13 @@ namespace HealthcareAnalytics.Controllers
         }
 
         // GET: Incidents/Edit/5
-        public async Task<ActionResult> Edit(Guid? id)
+        public ActionResult Edit(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Incident incident = await db.Incidents.FindAsync(id);
+            Incident incident = db.Incidents.Find(id);
             if (incident == null)
             {
                 return HttpNotFound();
@@ -129,12 +140,12 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
+        public ActionResult Edit([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(incident).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", incident.BranchId);
@@ -145,13 +156,13 @@ namespace HealthcareAnalytics.Controllers
         }
 
         // GET: Incidents/Delete/5
-        public async Task<ActionResult> Delete(Guid? id)
+        public ActionResult Delete(Guid? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Incident incident = await db.Incidents.FindAsync(id);
+            Incident incident = db.Incidents.Find(id);
             if (incident == null)
             {
                 return HttpNotFound();
@@ -162,11 +173,11 @@ namespace HealthcareAnalytics.Controllers
         // POST: Incidents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(Guid id)
+        public ActionResult DeleteConfirmed(Guid id)
         {
-            Incident incident = await db.Incidents.FindAsync(id);
+            Incident incident = db.Incidents.Find(id);
             db.Incidents.Remove(incident);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

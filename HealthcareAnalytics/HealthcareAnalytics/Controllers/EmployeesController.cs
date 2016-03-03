@@ -41,7 +41,7 @@ namespace HealthcareAnalytics.Controllers
                 }
             }
 
-            var people = db.Employees.Include(e => e.HomeContactInfo).Include(e => e.NameDetails).Include(e => e.WorkContactInfo)
+            var employees = db.Employees.Include(e => e.NameDetails).Include(e => e.EmploymentDetails)
                 .OrderBy(e => e.ID)
                 .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize);
@@ -53,7 +53,7 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.StartPage = startPage;
             ViewBag.EndPage = endPage;
 
-            return View(people.ToList());
+            return View(employees.ToList());
         }
 
         // GET: Employees/Details/5

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<HealthcareAnalytics.Models.Patient>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Patients";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,25 +12,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.HomeContactInfo.Street)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.NameDetails.Title)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayNameFor(model => model.NameDetails.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.NameDetails.MiddleName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NameDetails.LastName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Gender)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MedicareCardNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.DateOfBirth)
         </th>
         <th></th>
     </tr>
@@ -38,25 +35,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.HomeContactInfo.Street)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.NameDetails.Title)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.WorkContactInfo.Street)
+            @Html.DisplayFor(modelItem => item.NameDetails.FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateOfBirth)
+            @Html.DisplayFor(modelItem => item.NameDetails.MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NameDetails.LastName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Gender)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MedicareCardNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Branch.BranchName)
+            @Html.DisplayFor(modelItem => item.DateOfBirth)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

@@ -187,6 +187,7 @@
     <Compile Include="Models\PersonModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\IncidentsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-HealthcareAnalytics-20160215084807.mdf" />
@@ -245,9 +246,7 @@
     <Content Include="Views\Incidents\Edit.cshtml" />
     <Content Include="Views\Incidents\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

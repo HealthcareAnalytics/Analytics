@@ -1,10 +1,11 @@
-﻿@model IEnumerable<HealthcareAnalytics.Models.Employee>
+﻿@using HealthcareAnalytics.Models
+@model IEnumerable<HealthcareAnalytics.Models.Employee>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Employees";
 }
 
-<h2>Index</h2>
+<h2>@(ViewBag.Title)</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,13 +13,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.HomeContactInfo.Street)
+            @Html.DisplayNameFor(model => model.NameDetails.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NameDetails.Title)
+            @Html.DisplayNameFor(model => model.NameDetails.MiddleName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayNameFor(model => model.NameDetails.LastName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DateOfBirth)
@@ -27,7 +28,7 @@
             @Html.DisplayNameFor(model => model.Gender)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.EmploymentDetails)
         </th>
         <th></th>
     </tr>
@@ -35,13 +36,13 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.HomeContactInfo.Street)
+            @Html.DisplayFor(modelItem => item.NameDetails.FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.NameDetails.Title)
+            @Html.DisplayFor(modelItem => item.NameDetails.MiddleName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.WorkContactInfo.Street)
+            @Html.DisplayFor(modelItem => item.NameDetails.LastName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateOfBirth)
@@ -50,7 +51,7 @@
             @Html.DisplayFor(modelItem => item.Gender)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Branch.BranchName)
+            @Html.DisplayFor(modelItem => item.EmploymentDetails.ElementAtOrDefault(0).Position)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

@@ -18,9 +18,6 @@ namespace HealthcareAnalytics.Controllers
         // GET: Patients
         public ActionResult Index([DefaultValue(1)] int id)
         {
-            
-
-
             var currentPage = (id > 0) ? id : 1;
             int pageSize = 10;
 
@@ -43,7 +40,7 @@ namespace HealthcareAnalytics.Controllers
                 }
             }
 
-            var people = db.Patients.Include(p => p.HomeContactInfo).Include(p => p.NameDetails).Include(p => p.WorkContactInfo)
+            var patients = db.Patients.Include(p => p.NameDetails)
                 .OrderBy(e => e.ID)
                 .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize);
@@ -55,11 +52,7 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.StartPage = startPage;
             ViewBag.EndPage = endPage;
 
-            return View(people.ToList());
-
-
-
-
+            return View(patients.ToList());
         }
 
         // GET: Patients/Details/5

@@ -134,11 +134,13 @@ namespace HealthcareAnalytics.Models
         public Guid ID { get; set; }
 
         [Required]
-        public  DateTime DateOfBirth { get; set; }
+        [DisplayName("Date of Birth")]
+        public DateTime DateOfBirth { get; set; }
 
         [Required]
         //[CustomValidation(typeof(GenderValidation), "IsValidGender")]
         //[StringLength(1)]
+        [DisplayName("Gender")]
         public string Gender { get; set; }
 
         [ForeignKey("NameDetailsId")]
