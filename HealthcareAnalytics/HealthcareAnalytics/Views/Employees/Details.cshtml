@@ -1,66 +1,92 @@
-﻿@model HealthcareAnalytics.Models.Employee
+﻿@using HealthcareAnalytics.Models
+@model HealthcareAnalytics.ViewModels.EmployeesDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@(Model.FullName) (@(Model.Employee.EmploymentDetails.ElementAtOrDefault(0).Position))</h2>
+<h3>@(Model.Employee.Branch.BranchName)</h3>
 
 <div>
-    <h4>Employee</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.HomeContactInfo.Street)
+            @Html.DisplayNameFor(model => model.Employee.NameDetails.MaidenName)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.HomeContactInfo.Street)
+            @Html.DisplayFor(model => model.Employee.NameDetails.MaidenName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NameDetails.Title)
+            @Html.DisplayNameFor(model => model.Employee.NameDetails.NickName)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.NameDetails.Title)
+            @Html.DisplayFor(model => model.Employee.NameDetails.NickName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayNameFor(model => model.Employee.DateOfBirth)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.WorkContactInfo.Street)
+            @Html.DisplayFor(model => model.Employee.DateOfBirth)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Employee.Gender)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Html.DisplayFor(model => model.Employee.Gender)
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FullAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.Street)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.City),&nbsp;
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.ProvinceState)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.ZipPostalCode)
+        </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.Country)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Gender)
+            @Html.DisplayNameFor(model => model.Employee.HomeContactInfo.PhoneNumber)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Gender)
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.PhoneNumber)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.HomeContactInfo.CellPhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.CellPhoneNumber)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.Employee.HomeContactInfo.FaxNumber)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.Employee.HomeContactInfo.FaxNumber)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.HomeContactInfo.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.HomeContactInfo.Email)
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Employee.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

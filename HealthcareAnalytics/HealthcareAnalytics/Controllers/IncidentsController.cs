@@ -59,11 +59,11 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.StartPage = startPage;
             ViewBag.EndPage = endPage;
 
-            List<IncidentsViewModel> incidentsViewModels = new List<IncidentsViewModel>();
+            List<IncidentsIndexViewModel> incidentsViewModels = new List<IncidentsIndexViewModel>();
 
             foreach (Incident incident in incidents.ToList())
             {
-                incidentsViewModels.Add(new IncidentsViewModel {Incident = incident});
+                incidentsViewModels.Add(new IncidentsIndexViewModel {Incident = incident});
             }
 
             return View(incidentsViewModels);
@@ -76,12 +76,19 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Incident incident = db.Incidents.Find(id);
+            Incident incident = db.Incidents
+                .Include(i => i.Patient)
+                .Include(i => i.Patient.NameDetails)
+                .Include(i => i.Employee)
+                .Include(i => i.Employee.NameDetails)
+                .Include(i => i.IncidentType)
+                .SingleOrDefault(i => i.ID == id);
+
             if (incident == null)
             {
                 return HttpNotFound();
             }
-            return View(incident);
+            return View(new IncidentsDetailsViewModel() {Incident = incident});
         }
 
         // GET: Incidents/Create

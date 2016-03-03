@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HealthcareAnalytics.Models;
 using System.ComponentModel;
+using HealthcareAnalytics.ViewModels;
 
 namespace HealthcareAnalytics.Controllers
 {
@@ -62,12 +63,18 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = (Patient)db.People.Find(id);
+            Patient patient = db.Patients
+                .Include(p => p.HomeContactInfo)
+                .Include(p => p.WorkContactInfo)
+                .Include(p => p.NameDetails)
+                .Include(p => p.ChecckinDetails)
+                .SingleOrDefault(p => p.ID == id);
+
             if (patient == null)
             {
                 return HttpNotFound();
             }
-            return View(patient);
+            return View(new PatientsDetailsViewModel() {Patient = patient});
         }
 
         // GET: Patients/Create
