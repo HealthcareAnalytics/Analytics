@@ -46,7 +46,7 @@ namespace HealthcareAnalytics.Controllers
                 .Include(e => e.NameDetails)
                 .Include(e => e.EmploymentDetails)
                 .Include(e => e.HomeContactInfo)
-                .OrderBy(e => e.ID)
+                .OrderBy(e => e.NameDetails.FirstName)
                 .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize);
 
@@ -86,9 +86,6 @@ namespace HealthcareAnalytics.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street");
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title");
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street");
             ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName");
             return View();
         }
@@ -98,19 +95,27 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,DateOfBirth,Gender,NameDetailsId,HomeContactInfoId,WorkContactInfoId,BranchId")] Employee employee)
+        public ActionResult Create([Bind(Include = "ID,DateOfBirth,Gender,NameDetails,HomeContactInfo,BranchId")] Employee employee)
         {
+            employee.NameDetailsId = employee.NameDetails.ID;
+            employee.HomeContactInfoId = employee.HomeContactInfo.ID;
+            Branch branch = db.Branches.Include(b => b.ContactInformation).SingleOrDefault(b => b.ID == employee.BranchId);
+            employee.WorkContactInfoId = branch.ContactInformation.ID;
+
             if (ModelState.IsValid)
             {
-                employee.ID = Guid.NewGuid();
+                db.ContactInformations.Add(employee.HomeContactInfo);
+                db.SaveChanges();
+
+                db.NameDetails.Add(employee.NameDetails);
+                db.SaveChanges();
+
                 db.People.Add(employee);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", employee.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.WorkContactInfoId);
+            
             ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", employee.BranchId);
             return View(employee);
         }
@@ -122,15 +127,19 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+
+            Employee employee = db.Employees
+                .Include(e => e.HomeContactInfo)
+                .Include(e => e.WorkContactInfo)
+                .Include(e => e.NameDetails)
+                .Include(e => e.Branch)
+                .SingleOrDefault(e => e.ID == id);
+
             if (employee == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", employee.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.WorkContactInfoId);
-            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", employee.BranchId);
+            
             return View(employee);
         }
 
@@ -139,18 +148,25 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,DateOfBirth,Gender,NameDetailsId,HomeContactInfoId,WorkContactInfoId,BranchId")] Employee employee)
+        public ActionResult Edit([Bind(Include = "ID,DateOfBirth,Gender,NameDetails,NameDetailsId,HomeContactInfo,HomeContactInfoId,WorkContactInfo,WorkContactInfoId,BranchId")] Employee employee)
         {
+
+            employee.NameDetails.ID = employee.NameDetailsId;
+            employee.HomeContactInfo.ID = employee.HomeContactInfoId;
+
             if (ModelState.IsValid)
             {
+                db.Entry(employee.NameDetails).State = EntityState.Modified;
+                db.SaveChanges();
+
+                db.Entry(employee.HomeContactInfo).State = EntityState.Modified;
+                db.SaveChanges();
+
                 db.Entry(employee).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", employee.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", employee.WorkContactInfoId);
-            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", employee.BranchId);
+       
             return View(employee);
         }
 

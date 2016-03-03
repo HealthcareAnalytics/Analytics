@@ -41,8 +41,9 @@ namespace HealthcareAnalytics.Controllers
                 }
             }
 
-            var patients = db.Patients.Include(p => p.NameDetails)
-                .OrderBy(e => e.ID)
+            var patients = db.Patients
+                .Include(p => p.NameDetails)
+                .OrderBy(e => e.NameDetails.FirstName)
                 .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize);
 
@@ -92,13 +93,27 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,DateOfBirth,Gender,NameDetailsId,HomeContactInfoId,WorkContactInfoId,MedicareCardNumber,BranchId")] Patient patient)
+        public ActionResult Create([Bind(Include = "ID,DateOfBirth,Gender,NameDetails,HomeContactInfo,WorkContactInfo,MedicareCardNumber,BranchId")] Patient patient)
         {
+
+            patient.WorkContactInfoId = patient.WorkContactInfo.ID;
+            patient.HomeContactInfoId = patient.HomeContactInfo.ID;
+            patient.NameDetailsId = patient.NameDetails.ID;
+
             if (ModelState.IsValid)
             {
-                patient.ID = Guid.NewGuid();
+                db.ContactInformations.Add(patient.WorkContactInfo);
+                db.SaveChanges();
+
+                db.ContactInformations.Add(patient.HomeContactInfo);
+                db.SaveChanges();
+
+                db.NameDetails.Add(patient.NameDetails);
+                db.SaveChanges();
+
                 db.People.Add(patient);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 

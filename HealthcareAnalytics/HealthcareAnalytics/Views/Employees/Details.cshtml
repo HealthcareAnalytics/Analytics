@@ -5,7 +5,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>@(Model.FullName) (@(Model.Employee.EmploymentDetails.ElementAtOrDefault(0).Position))</h2>
+@{
+    string position = Model.Employee.EmploymentDetails.ElementAtOrDefault(0) == null ? "(Terminated)" : "(" + Model.Employee.EmploymentDetails.ElementAtOrDefault(0).Position + ")";
+}
+<h2>@(Model.FullName) @(position)</h2>
 <h3>@(Model.Employee.Branch.BranchName)</h3>
 
 <div>
