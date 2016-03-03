@@ -100,7 +100,6 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.PatientId = new SelectList(db.People, "ID", "Gender");
             return View();
         }
-
         // POST: Incidents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -122,6 +121,99 @@ namespace HealthcareAnalytics.Controllers
             ViewBag.PatientId = new SelectList(db.People, "ID", "Gender", incident.PatientId);
             return View(incident);
         }
+        //GET: Incidents/General
+        public ActionResult General()
+        {
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName");
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender");
+            ViewBag.IncidentTypeId = 1;
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender");
+            return View();
+        }
+
+        // POST: Incidents/General
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult General([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
+        {
+            if (ModelState.IsValid)
+            {
+                incident.ID = Guid.NewGuid();
+                db.Incidents.Add(incident);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", incident.BranchId);
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender", incident.EmployeeId);
+            ViewBag.IncidentTypeId = 1;
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender", incident.PatientId);
+            return View(incident);
+        }
+
+        //GET: Incidents/Complaint
+        public ActionResult Complaint()
+        {
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName");
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender");
+            ViewBag.IncidentTypeId = new SelectList(db.IncidentTypes, "ID", "Name");
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender");
+            return View();
+        }
+        // POST: Incidents/Complaint
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Complaint([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
+        {
+            if (ModelState.IsValid)
+            {
+                incident.ID = Guid.NewGuid();
+                db.Incidents.Add(incident);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", incident.BranchId);
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender", incident.EmployeeId);
+            ViewBag.IncidentTypeId = new SelectList(db.IncidentTypes, "ID", "Name", incident.IncidentTypeId);
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender", incident.PatientId);
+            return View(incident);
+        }
+        //GET: Incidents/Fall
+        public ActionResult Fall()
+        {
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName");
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender");
+            ViewBag.IncidentTypeId = new SelectList(db.IncidentTypes, "ID", "Name");
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender");
+            return View();
+        }
+        // POST: Incidents/Fall
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Fall([Bind(Include = "ID,BranchId,EmployeeId,PatientId,IncidentTypeId,DateAndTime,Location,Details,FollowUpActions")] Incident incident)
+        {
+            if (ModelState.IsValid)
+            {
+                incident.ID = Guid.NewGuid();
+                db.Incidents.Add(incident);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", incident.BranchId);
+            ViewBag.EmployeeId = new SelectList(db.People, "ID", "Gender", incident.EmployeeId);
+            ViewBag.IncidentTypeId = new SelectList(db.IncidentTypes, "ID", "Name", incident.IncidentTypeId);
+            ViewBag.PatientId = new SelectList(db.People, "ID", "Gender", incident.PatientId);
+            return View(incident);
+        }
+       
 
         // GET: Incidents/Edit/5
         public ActionResult Edit(Guid? id)
