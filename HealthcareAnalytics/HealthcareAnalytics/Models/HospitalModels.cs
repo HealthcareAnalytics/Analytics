@@ -27,10 +27,14 @@ namespace HealthcareAnalytics.Models
         public Employee Employee { get; set; }
 
         [Required]
+        [DisplayName("Start Date")]
         public DateTime StartDate { get; set; }
+
+        [DisplayName("Termination Date")]
         public DateTime TerminationDate { get; set; }
 
         [Required]
+        [DisplayName("Position")]
         public string Position { get; set; }
 
         [Required]
@@ -80,6 +84,7 @@ namespace HealthcareAnalytics.Models
 
     public class Employee : Person
     {
+        [DisplayName("Position")]
         public ICollection<EmploymentDetails> EmploymentDetails { get; set; } 
 
         public Guid BranchId { get; set; }
@@ -124,6 +129,7 @@ namespace HealthcareAnalytics.Models
         public int IncidentTypeId { get; set; }
 
         [Required]
+        [DisplayName("Date/Time")]
         public DateTime DateAndTime { get; set; }
 
         [Required]
@@ -144,6 +150,7 @@ namespace HealthcareAnalytics.Models
         public int ID { get; set; }
         
         [Required]
+        [DisplayName("Incident Type")]
         public string Name { get; set; }
     }
 

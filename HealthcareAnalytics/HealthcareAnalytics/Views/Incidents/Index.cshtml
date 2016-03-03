@@ -1,39 +1,27 @@
-﻿@model IEnumerable<HealthcareAnalytics.Models.Incident>
+﻿@model IEnumerable<HealthcareAnalytics.ViewModels.IncidentsViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Incidents";
 }
 
-<h2>Index</h2>
+<h2>@(ViewBag.Title)</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Branch.BranchName)
+            @Html.DisplayNameFor(model => model.Incident.Branch.BranchName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Employee.Gender)
+            @Html.DisplayNameFor(model => model.PatientFullName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IncidentType.Name)
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Patient.Gender)
+            @Html.DisplayNameFor(model => model.Incident.DateAndTime)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateAndTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Location)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Details)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FollowUpActions)
+            @Html.DisplayNameFor(model => model.Incident.IncidentType.Name)
         </th>
         <th></th>
     </tr>
@@ -41,33 +29,24 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Branch.BranchName)
+            @Html.DisplayFor(modelItem => item.Incident.Branch.BranchName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Employee.Gender)
+            @Html.DisplayFor(modelItem => item.PatientFullName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IncidentType.Name)
+            @Html.DisplayFor(modelItem => item.EmployeeFullName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Patient.Gender)
+            @Html.DisplayFor(modelItem => item.Incident.DateAndTime)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateAndTime)
+            @Html.DisplayFor(modelItem => item.Incident.IncidentType.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Details)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FollowUpActions)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.Incident.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Incident.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Incident.ID })
         </td>
     </tr>
 }
