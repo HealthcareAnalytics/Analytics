@@ -73,6 +73,7 @@ namespace HealthcareAnalytics.Models
 
     public class Patient : Person
     {
+        [DisplayName("Medicare Card Number")]
         public int MedicareCardNumber { get; set; }
 
         public ICollection<CheckinDetails> ChecckinDetails { get; set; }
