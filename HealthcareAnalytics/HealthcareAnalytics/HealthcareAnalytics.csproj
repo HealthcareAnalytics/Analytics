@@ -309,6 +309,9 @@
     <Content Include="Views\Incidents\Edit.cshtml" />
     <Content Include="Views\Incidents\Index.cshtml" />
     <Content Include="Views\Incidents\Reports.cshtml" />
+    <Content Include="Views\Incidents\General.cshtml" />
+    <Content Include="Views\Incidents\Fall.cshtml" />
+    <Content Include="Views\Incidents\Complaint.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\images\" />
