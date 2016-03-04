@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "Incident Reports";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h4>Incidents Line Chart</h4>
+<div id="incidents-line-chart-container" width="1000" height="400">
+    <div width="80px" height="80px" style="margin: auto auto">
+        <i id="incidents-line-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+    </div>
+    <canvas id="incidents-line-chart" width="1000" height="400"></canvas>
+    <div id="incidents-line-chart-legend" class="chart-legend"></div>
+</div>
+
+<h4>Incidents Bar Graph</h4>
+<div id="incidents-bar-graph-container" width="1000" height="400">
+    <div width="80px" height="80px" style="margin: auto auto">
+        <i id="incidents-bar-graph-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+    </div>
+    <canvas id="incidents-bar-graph" width="1000" height="400"></canvas>
+    <div id="incidents-bar-graph-legend" class="chart-legend"></div>
+</div>
+
+<h4>Incidents Pie Chart</h4>
+<div id="incidents-pie-chart-container" width="1000" height="400">
+    <div width="80px" height="80px" style="margin: auto auto">
+        <i id="incidents-pie-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+    </div>
+    <canvas id="incidents-pie-chart" width="1000" height="400"></canvas>
+    <div id="incidents-pie-chart-legend" class="chart-legend"></div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="/Scripts/Chart.min.js"></script>
+
+    <script type="text/javascript">
+
+        var buyerData = {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+            datasets: []
+        }
+
+        var pieData = [];
+
+        var pieOptions = {
+            segmentShowStroke: false,
+            animateScale: true
+        }
+
+        var barData = {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+            datasets: []
+        }
+
+        $('#incidents-line-chart').hide();
+        $('#incidents-bar-graph').hide();
+        $('#incidents-pie-chart').hide();
+
+
+        $.getJSON('@Url.Action("NumberOfIncidentsByType", "Analytics")', function(data) {
+            for (var i = 0; i < data.length; i++) {
+                barData.datasets.push({
+                    fillColor: '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
+                    strokeColor: "#ffffff",
+                    data: data[i].count,
+                    label: data[i].type
+                });
+
+                var total = 0;
+
+                $.each(data[i].count, function() {
+                    total += this;
+                });
+
+                pieData.push({
+                    value: total,
+                    color: '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
+                    label: data[i].type
+                });
+
+                $.each(data[i].count, function() {
+                    total += this;
+                });
+
+                var colorAlpha = "rgba(" + (Math.floor(((Math.random() * 255) + 1))) + "," + (Math.floor(((Math.random() * 255) + 1)))
+                    + "," + (Math.floor(((Math.random() * 255) + 1))) + ",0.4)";
+
+                buyerData.datasets.push({
+                    fillColor: colorAlpha,
+                    strokeColor: '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
+                    pointColor: "#fff",
+                    pointStrokeColor: '#' + (Math.random() * 0xFFFFFF << 0).toString(16),
+                    data: data[i].count,
+                    label: data[i].type
+                });
+            }
+
+            $('#incidents-line-chart-spinner').hide();
+            var buyers = document.getElementById('incidents-line-chart').getContext('2d');
+            var lineChart = new Chart(buyers).Line(buyerData);
+            document.getElementById('incidents-line-chart-legend').innerHTML = lineChart.generateLegend();
+            $('#incidents-line-chart').show();
+
+            $('#incidents-bar-graph-spinner').hide();
+            var income = document.getElementById("incidents-bar-graph").getContext("2d");
+            var barGraph = new Chart(income).Bar(barData);
+            document.getElementById('incidents-bar-graph-legend').innerHTML = barGraph.generateLegend();
+            $('#incidents-bar-graph').show();
+
+            $('#incidents-pie-chart-spinner').hide()
+            var countries = document.getElementById("incidents-pie-chart").getContext("2d");
+            var pieChart = new Chart(countries).Pie(pieData, pieOptions);
+            document.getElementById('incidents-pie-chart-legend').innerHTML = pieChart.generateLegend();
+            $('#incidents-pie-chart').show();
+        });
+    </script>
+
+}

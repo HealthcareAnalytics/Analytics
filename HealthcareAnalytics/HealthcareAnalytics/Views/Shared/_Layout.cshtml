@@ -8,6 +8,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" href="/Content/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -25,10 +26,14 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Patients", "Index", "Patients")</li>
                     <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
-                    <li>@Html.ActionLink("Incidents", "Index", "Incidents")</li>                   
+
+                   
                     <li class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Report Incident<b class="caret"></b></a>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Incidents<b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("View All", "Index", "Incidents")</li>
+                            <li>@Html.ActionLink("View Reports", "Reports", "Incidents")</li>
+                            <li class="divider"></li>
                             <li><a href="Incidents/General/">General Incident</a></li>
                             <li><a href="Incidents/Complaint/">Complaint</a></li>
                             <li><a href="Incidents/Fall/">Fall</a></li>
