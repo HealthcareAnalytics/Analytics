@@ -88,9 +88,9 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MedicareCardNumber, "Branch", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.MedicareCardNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.MedicareCardNumber, new { @class = "date-picker" })
+                @Html.TextBoxFor(model => model.MedicareCardNumber, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.MedicareCardNumber, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -31,7 +31,7 @@ namespace HealthcareAnalytics.Models
         public DateTime StartDate { get; set; }
 
         [DisplayName("Termination Date")]
-        public DateTime TerminationDate { get; set; }
+        public DateTime? TerminationDate { get; set; }
 
         [Required]
         [DisplayName("Position")]
@@ -62,7 +62,7 @@ namespace HealthcareAnalytics.Models
         [Required]
         public DateTime CheckinDate { get; set; }
 
-        public DateTime DischargeDate { get; set; }
+        public DateTime? DischargeDate { get; set; }
 
         public string IllnessDetails { get; set; }
 
@@ -73,6 +73,7 @@ namespace HealthcareAnalytics.Models
 
     public class Patient : Person
     {
+        [DisplayName("Medicare Card Number")]
         public int MedicareCardNumber { get; set; }
 
         public ICollection<CheckinDetails> ChecckinDetails { get; set; }
@@ -196,6 +197,7 @@ namespace HealthcareAnalytics.Models
 
         public HospitalDBContext() : base("DefaultConnection")
         {
+            Database.SetInitializer<HospitalDBContext>(new DropCreateDatabaseIfModelChanges<HospitalDBContext>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

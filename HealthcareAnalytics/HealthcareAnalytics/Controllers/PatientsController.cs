@@ -81,9 +81,6 @@ namespace HealthcareAnalytics.Controllers
         // GET: Patients/Create
         public ActionResult Create()
         {
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street");
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title");
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street");
             ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName");
             return View();
         }
@@ -116,10 +113,7 @@ namespace HealthcareAnalytics.Controllers
 
                 return RedirectToAction("Index");
             }
-
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", patient.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.WorkContactInfoId);
+            
             ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", patient.BranchId);
             return View(patient);
         }
@@ -131,15 +125,19 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = (Patient)db.People.Find(id);
+
+            Patient patient = db.Patients
+                .Include(p => p.NameDetails)
+                .Include(p => p.WorkContactInfo)
+                .Include(p => p.HomeContactInfo)
+                .Include(p => p.Branch)
+                .SingleOrDefault(p => p.ID == id);
+
             if (patient == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", patient.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.WorkContactInfoId);
-            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", patient.BranchId);
+
             return View(patient);
         }
 
@@ -148,18 +146,29 @@ namespace HealthcareAnalytics.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,DateOfBirth,Gender,NameDetailsId,HomeContactInfoId,WorkContactInfoId,MedicareCardNumber,BranchId")] Patient patient)
+        public ActionResult Edit([Bind(Include = "ID,DateOfBirth,Gender,NameDetailsId,HomeContactInfoId,WorkContactInfoId,MedicareCardNumber,BranchId,HomeContactInfo,WorkContactInfo,NameDetails")] Patient patient)
         {
+            patient.HomeContactInfo.ID = patient.HomeContactInfoId;
+            patient.WorkContactInfo.ID = patient.WorkContactInfoId;
+            patient.NameDetails.ID = patient.NameDetailsId;
+
             if (ModelState.IsValid)
             {
+                db.Entry(patient.NameDetails).State = EntityState.Modified;
+                db.SaveChanges();
+
+                db.Entry(patient.WorkContactInfo).State = EntityState.Modified;
+                db.SaveChanges();
+
+                db.Entry(patient.HomeContactInfo).State = EntityState.Modified;
+                db.SaveChanges();
+
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.HomeContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.HomeContactInfoId);
-            ViewBag.NameDetailsId = new SelectList(db.NameDetails, "ID", "Title", patient.NameDetailsId);
-            ViewBag.WorkContactInfoId = new SelectList(db.ContactInformations, "ID", "Street", patient.WorkContactInfoId);
-            ViewBag.BranchId = new SelectList(db.Branches, "ID", "BranchName", patient.BranchId);
+
             return View(patient);
         }
 

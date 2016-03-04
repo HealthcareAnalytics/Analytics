@@ -22,6 +22,7 @@ namespace AnalyticsDataSeeder
         {
             AnalyticsDataSeeder a = new AnalyticsDataSeeder();
 
+            a.ClearTableData();
             a.RunBase();
 
             new Thread(a.Run).Start();
@@ -29,6 +30,27 @@ namespace AnalyticsDataSeeder
             new Thread(a.Run).Start();
 
             a.Run();
+        }
+
+        public void ClearTableData()
+        {
+            Console.WriteLine("Clearing database data...");
+            HospitalDBContext context = new HospitalDBContext();
+            context.Database.ExecuteSqlCommand("delete from Incidents");
+            context.Database.ExecuteSqlCommand("delete from IncidentTypes");
+            context.Database.ExecuteSqlCommand("DBCC CHECKIDENT('IncidentTypes', RESEED, 1);");
+
+            context.Database.ExecuteSqlCommand("delete from EmploymentDetails");
+            context.Database.ExecuteSqlCommand("delete from Employees");
+
+            context.Database.ExecuteSqlCommand("delete from CheckinDetails");
+            context.Database.ExecuteSqlCommand("delete from Patients");
+        
+            context.Database.ExecuteSqlCommand("delete from NameDetails");
+            context.Database.ExecuteSqlCommand("delete from ContactInformations");
+
+            context.Database.ExecuteSqlCommand("delete from People");
+            context.Database.ExecuteSqlCommand("delete from Branches");
         }
 
         public void RunBase()
@@ -167,7 +189,7 @@ namespace AnalyticsDataSeeder
             List<Employee> employees = new List<Employee>();
 
             // Create Employees
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 ContactInformation homeContact = new ContactInformation();
                 homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length)];
@@ -195,7 +217,7 @@ namespace AnalyticsDataSeeder
                 context.SaveChanges();
 
                 Employee employee = new Employee();
-                employee.DateOfBirth = DateTime.Today;
+                employee.DateOfBirth = randomDate(r);
                 employee.Gender = genders[r.Next(0, 1)];
                 employee.NameDetailsId = nameDetails.ID;
                 employee.HomeContactInfoId = homeContact.ID;
@@ -207,8 +229,11 @@ namespace AnalyticsDataSeeder
 
                 EmploymentDetails details = new EmploymentDetails();
                 details.EmployeeId = employee.ID;
-                details.StartDate = DateTime.Today;
-                details.TerminationDate = DateTime.Today;
+                details.StartDate = randomDate(r);
+                if (r.Next(0, 2) == 1)
+                {
+                    details.TerminationDate = DateTime.Today;
+                }
                 details.Position = positions[r.Next(0, positions.Length)];
                 details.Department = departments[r.Next(0, departments.Length)];
 
@@ -221,7 +246,7 @@ namespace AnalyticsDataSeeder
             string[] locations = {"Hallway", "Washroom", "Bedroom", "Front Desk", "Love Chambers"};
             
             // Create Patients
-            for (int i = 0; i < 2500; i++)
+            for (int i = 0; i < 100; i++)
             {
                 ContactInformation homeContact = new ContactInformation();
                 homeContact.Street = streetStart++ + streetBase[r.Next(0, streetBase.Length)];
@@ -263,7 +288,7 @@ namespace AnalyticsDataSeeder
                 context.SaveChanges();
 
                 Patient patient = new Patient();
-                patient.DateOfBirth = DateTime.Today;
+                patient.DateOfBirth = randomDate(r);
                 patient.Gender = genders[r.Next(0, 2)];
                 patient.NameDetailsId = nameDetails.ID;
                 patient.HomeContactInfoId = homeContact.ID;
@@ -276,8 +301,11 @@ namespace AnalyticsDataSeeder
 
                 CheckinDetails details = new CheckinDetails();
                 details.PatientId = patient.ID;
-                details.CheckinDate = DateTime.Today;
-                details.DischargeDate = DateTime.Today;
+                details.CheckinDate = randomDate(r);
+                if (r.Next(0, 2) == 1)
+                {
+                    details.DischargeDate = DateTime.Today;
+                }
                 details.Diagnosis = "Dieing";
                 details.IllnessDetails = "Cancer";
 
@@ -286,7 +314,9 @@ namespace AnalyticsDataSeeder
 
                 List<Employee> myEmployees = employees.Where(e => e.BranchId == patient.BranchId).ToList();
                 //Create incidents for Patient
-                int noOfIncidents = r.Next(1, 11);
+                int noOfIncidents = r.Next(1, 6);
+                int minIncId = context.IncidentTypes.First().ID;
+                int maxIncId = minIncId + 3;
                 for (int x = 0; x < noOfIncidents; x++)
                 {
                     Incident incident = new Incident();
@@ -294,8 +324,8 @@ namespace AnalyticsDataSeeder
                     incident.EmployeeId = myEmployees[r.Next(0, myEmployees.Count())].ID;
                     incident.Location = locations[r.Next(0, locations.Length)];
                     incident.PatientId = patient.ID;
-                    incident.DateAndTime = DateTime.Today;
-                    incident.IncidentTypeId = r.Next(1, types.Count);
+                    incident.DateAndTime = randomDate(r);
+                    incident.IncidentTypeId = r.Next(minIncId, maxIncId);
                     incident.Details = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                                        "sed do eiusmod tempor incididunt ut labore et dolore magna " +
                                        "aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco " +
@@ -319,5 +349,14 @@ namespace AnalyticsDataSeeder
 
             Console.WriteLine("Data seeding process completed.");
         }
+
+        private DateTime randomDate(Random r)
+        {
+            DateTime start = new DateTime(1995, 1, 1);
+            int range = (DateTime.Today - start).Days;
+            return start.AddDays(r.Next(range));
+        }
     }
+
+
 }
