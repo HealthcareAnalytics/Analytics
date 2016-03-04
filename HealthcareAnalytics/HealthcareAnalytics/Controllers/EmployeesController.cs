@@ -177,11 +177,25 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
+
+            Employee employee = db.Employees
+                .Include(e => e.Branch)
+                .Include(e => e.NameDetails)
+                .SingleOrDefault(e => e.ID == id);
+
             if (employee == null)
             {
                 return HttpNotFound();
             }
+
+            Incident incident = db.Incidents.FirstOrDefault(i => i.EmployeeId == id);
+            ViewBag.CanDelete = true;
+
+            if (incident != null)
+            {
+                ViewBag.CanDelete = false;
+            }
+
             return View(employee);
         }
 
@@ -190,9 +204,48 @@ namespace HealthcareAnalytics.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Employee employee =  db.Employees.Find(id);
+            Incident incident = db.Incidents.FirstOrDefault(i => i.EmployeeId == id);
+
+            if (incident != null)
+            {
+                return RedirectToAction("Delete");
+            }
+
+            Employee employee =  db.Employees
+                .Include(e => e.NameDetails)
+                .Include(e => e.HomeContactInfo)
+                .Include(e => e.EmploymentDetails)
+                .SingleOrDefault(e => e.ID == id);
+
+            EmploymentDetails empDetails = db.EmploymentDetails
+                .SingleOrDefault(ed => ed.EmployeeId == employee.ID);
+
+            if (employee == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (empDetails != null)
+            {
+                db.EmploymentDetails.Remove(empDetails);
+                db.SaveChanges();
+            }
+
             db.People.Remove(employee);
             db.SaveChanges();
+
+            if (employee.HomeContactInfo != null)
+            {
+                db.ContactInformations.Remove(employee.HomeContactInfo);
+                db.SaveChanges();
+            }
+
+            if (employee.NameDetails != null)
+            {
+                db.NameDetails.Remove(employee.NameDetails);
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
