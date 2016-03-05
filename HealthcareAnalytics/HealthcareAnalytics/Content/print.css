@@ -1,0 +1,4 @@
+﻿#header, #nav, .noprint, a 
+{
+    display: none;
+}
