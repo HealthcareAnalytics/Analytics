@@ -104,11 +104,11 @@ namespace HealthcareAnalytics.Controllers
 
             if (ModelState.IsValid)
             {
-                db.ContactInformations.Add(employee.HomeContactInfo);
-                db.SaveChanges();
+                //db.ContactInformations.Add(employee.HomeContactInfo);
+                //db.SaveChanges();
 
-                db.NameDetails.Add(employee.NameDetails);
-                db.SaveChanges();
+                //db.NameDetails.Add(employee.NameDetails);
+                //db.SaveChanges();
 
                 db.People.Add(employee);
                 db.SaveChanges();

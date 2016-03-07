@@ -5,31 +5,34 @@
 
 <h2>@ViewBag.Title</h2>
 
-<h4>Incidents Line Chart</h4>
-<div id="incidents-line-chart-container" width="1000" height="400">
-    <div width="80px" height="80px" style="margin: auto auto">
-        <i id="incidents-line-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
-    </div>
-    <canvas id="incidents-line-chart" width="1000" height="400"></canvas>
-    <div id="incidents-line-chart-legend" class="chart-legend"></div>
-</div>
 
-<h4>Incidents Bar Graph</h4>
-<div id="incidents-bar-graph-container" width="1000" height="400">
-    <div width="80px" height="80px" style="margin: auto auto">
-        <i id="incidents-bar-graph-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+    <!-- Wrapper for slides -->
+<div class="container" role="listbox">
+    <div id="incidents-line-chart-container" class="col-md-6">
+        <h4>Incidents Line Chart</h4>
+        <div width="80px" height="80px" style="margin: auto auto">
+            <i id="incidents-line-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+        </div>
+        <canvas id="incidents-line-chart" width="500px" height="300px"></canvas>
+        <div id="incidents-line-chart-legend" class="chart-legend"></div>
     </div>
-    <canvas id="incidents-bar-graph" width="1000" height="400"></canvas>
-    <div id="incidents-bar-graph-legend" class="chart-legend"></div>
-</div>
+    <div id="incidents-bar-graph-container" class="col-md-6">
+        <h4>Incidents Bar Graph</h4>
+        <div width="80px" height="80px" style="margin: auto auto">
+            <i id="incidents-bar-graph-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+        </div>
+        <canvas id="incidents-bar-graph" width="500px" height="300px"></canvas>
+        <div id="incidents-bar-graph-legend" class="chart-legend"></div>
+    </div>
 
-<h4>Incidents Pie Chart</h4>
-<div id="incidents-pie-chart-container" width="1000" height="400">
-    <div width="80px" height="80px" style="margin: auto auto">
-        <i id="incidents-pie-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+    <div id="incidents-pie-chart-container" class="col-md-6">
+        <h4>Incidents Pie Chart</h4>
+        <div width="80px" height="80px" style="margin: auto auto">
+            <i id="incidents-pie-chart-spinner" class="fa fa-spin fa-spinner" style="font-size: 75px; color: grey"></i>
+        </div>
+        <canvas id="incidents-pie-chart" width="500px" height="300px"></canvas>
+        <div id="incidents-pie-chart-legend" class="chart-legend"></div>
     </div>
-    <canvas id="incidents-pie-chart" width="1000" height="400"></canvas>
-    <div id="incidents-pie-chart-legend" class="chart-legend"></div>
 </div>
 
 @section Scripts {
@@ -58,7 +61,6 @@
         $('#incidents-line-chart').hide();
         $('#incidents-bar-graph').hide();
         $('#incidents-pie-chart').hide();
-
 
         $.getJSON('@Url.Action("NumberOfIncidentsByType", "Analytics")', function(data) {
             for (var i = 0; i < data.length; i++) {
