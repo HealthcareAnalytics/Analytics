@@ -179,11 +179,25 @@ namespace HealthcareAnalytics.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = (Patient)db.People.Find(id);
+
+            Patient patient = db.Patients
+                .Include(e => e.Branch)
+                .Include(e => e.NameDetails)
+                .SingleOrDefault(e => e.ID == id);
+
             if (patient == null)
             {
                 return HttpNotFound();
             }
+
+            Incident incident = db.Incidents.FirstOrDefault(i => i.PatientId == id);
+            ViewBag.CanDelete = true;
+
+            if (incident != null)
+            {
+                ViewBag.CanDelete = false;
+            }
+
             return View(patient);
         }
 
@@ -192,9 +206,53 @@ namespace HealthcareAnalytics.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Patient patient = (Patient)db.People.Find(id);
+            Incident incident = db.Incidents.FirstOrDefault(i => i.EmployeeId == id);
+
+            if (incident != null)
+            {
+                return RedirectToAction("Delete");
+            }
+
+            Patient patient = db.Patients
+                .Include(e => e.NameDetails)
+                .Include(e => e.HomeContactInfo)
+                .Include(e => e.WorkContactInfo)
+                .SingleOrDefault(e => e.ID == id);
+
+            CheckinDetails checkinDetails = db.CheckinDetails.FirstOrDefault(cd => cd.PatientId == patient.ID);
+
+            if (patient == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (checkinDetails != null)
+            {
+                db.CheckinDetails.Remove(checkinDetails);
+                db.SaveChanges();
+            }
+
             db.People.Remove(patient);
             db.SaveChanges();
+
+            if (patient.HomeContactInfo != null)
+            {
+                db.ContactInformations.Remove(patient.HomeContactInfo);
+                db.SaveChanges();
+            }
+
+            if (patient.WorkContactInfo != null)
+            {
+                db.ContactInformations.Remove(patient.WorkContactInfo);
+                db.SaveChanges();
+            }
+
+            if (patient.NameDetails != null)
+            {
+                db.NameDetails.Remove(patient.NameDetails);
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
